@@ -16,6 +16,8 @@ print("Welcome to the number guessing game! Please choose your difficulty.\n"
       "enablehint - enables hints\n"
       "disablehint - disables hints\n"
       "hist - shows previously guess numbers for oldest to newest\n"
+      "enablehist - enable history (On by Default)\n"
+      "disablehist - disable history (On by Default)\n"
       )
 
 
@@ -70,6 +72,7 @@ random_number = (random.randrange(0, top_of_range))
 guesses = 0
 last_guess = 'h'
 hintenabled = False
+histenabled = True
 guessed_values = []
 while True:
     guesses += 1
@@ -81,12 +84,29 @@ while True:
     if user_guess == "quit":
         quit()
 
+    #enable history
+    if user_guess == "enablehist":
+        if histenabled:
+            print("hist already enabled.")
+            continue
+        else:
+            histenabled = True
+            continue
+    #disable history
+    if user_guess == "disablehist":
+        if not histenabled:
+            print("hist already disabled")
+            continue
+        else:
+            histenabled = False
+
     #enable hints
     if user_guess == "enablehint":
         hintenabled = True
         print("Hints Enabled")
         continue
 
+    #disable hints
     if user_guess == "disablehint":
         hintenabled = False
         print("Hints Disabled")
@@ -107,14 +127,21 @@ while True:
             print("Please enter a valid syntax.")
         continue
     elif user_guess == 'h' and not hintenabled:
-        print("Hints are not enabled")
+        print("Hints are not enabled. Type enablehint to enable.")
         continue
 
     #history command
     if user_guess == 'hist':
-        print("OLDEST -> NEWEST     ")
-        print(guessed_values, sep=',')
-        continue
+        if histenabled:
+            if not guessed_values:
+                print("No Values to print.")
+                continue
+            else:
+                print("OLDEST -> NEWEST     ")
+                print(guessed_values, sep=',')
+                continue
+        else:
+            print("History is disabled. Type enablehist to enable.")
 
     #Actual Check for Digit
     if user_guess.isdigit():

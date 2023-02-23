@@ -10,3 +10,5 @@ h - gives hints (Off by Default)
 enablehint - enables hints
 disablehint - disables hints
 hist - shows previously guess numbers for oldest to newest
+enablehist - enable history
+disablehist - disable history
