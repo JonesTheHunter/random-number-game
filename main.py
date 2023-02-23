@@ -1,6 +1,6 @@
 import random
 
-
+#intro
 print("Welcome to the number guessing game! Please choose your difficulty.\n"
       "1. Easy (10 numbers)\n"
       "2. Medium (100 numbers)\n"
@@ -20,7 +20,7 @@ print("Welcome to the number guessing game! Please choose your difficulty.\n"
       "disablehist - disable history (On by Default)\n"
       )
 
-
+#pick game mode
 gamemode = None
 game_mode_picked = False
 custom_game_mode = False
@@ -66,13 +66,50 @@ while not game_mode_picked:
     else:
         print("Please provide a valid number.")
 
+#Hint Mutations
+print("Would you like to disable hint command? Y or N")
 
+hintmutator = False
+hintenabled = False
+while True:
+    mutation_confirm = input()
+
+    if mutation_confirm.isalpha():
+        if mutation_confirm.lower() == 'y':
+            hintmutator = False
+            hintenabled = True
+        elif mutation_confirm.lower() == 'n':
+            hintmutator = True
+            hintenabled = False
+        else:
+            print("Please type y or n.")
+            continue
+    break
+
+#Hist Mutations
+histmutator = True
+histenabled = True
+print("Would you like to disable hist command? Y or N")
+while True:
+    mutation_confirm = input()
+
+    if mutation_confirm.isalpha():
+        if mutation_confirm.lower() == 'y':
+            histmutator = False
+            histenabled = True
+        elif mutation_confirm.lower() == 'n':
+            histmutator = True
+            histenabled = True
+        else:
+            print("Please type y or n.")
+            continue
+    break
+
+#main game
 top_of_range = int(gamemode)
 random_number = (random.randrange(0, top_of_range))
 guesses = 0
 last_guess = 'h'
-hintenabled = False
-histenabled = True
 guessed_values = []
 while True:
     guesses += 1
@@ -84,7 +121,7 @@ while True:
     if user_guess == "quit":
         quit()
 
-    #enable history
+    # enable history
     if user_guess == "enablehist":
         if histenabled:
             print("hist already enabled.")
@@ -92,46 +129,56 @@ while True:
         else:
             histenabled = True
             continue
+
     #disable history
     if user_guess == "disablehist":
         if not histenabled:
             print("hist already disabled")
             continue
         else:
+            print("hist command has been disabled.")
             histenabled = False
+            continue
 
-    #enable hints
+        #enable hints
     if user_guess == "enablehint":
         hintenabled = True
         print("Hints Enabled")
         continue
 
-    #disable hints
+        #disable hints
     if user_guess == "disablehint":
         hintenabled = False
         print("Hints Disabled")
         continue
 
     #hint command
-    if user_guess == 'h' and hintenabled:
-        if str(last_guess).isdigit():
-            if int(last_guess) > random_number:
-                print("Too high")
-            elif int(last_guess) < random_number:
-                print("Too low")
-            continue
-        elif last_guess == 'h':
-            print("Please Guess One Time.")
-            continue
+    if user_guess == 'h' and hintmutator:
+        if hintenabled:
+            if str(last_guess).isdigit():
+                if int(last_guess) > random_number:
+                    print("Too high")
+                    continue
+                elif int(last_guess) < random_number:
+                    print("Too low")
+                    continue
+                elif last_guess == 'h':
+                    print("Please Guess One Time.")
+                    continue
+                else:
+                    print("Please enter a valid syntax.")
+                continue
         else:
-            print("Please enter a valid syntax.")
-        continue
-    elif user_guess == 'h' and not hintenabled:
-        print("Hints are not enabled. Type enablehint to enable.")
-        continue
+            print("Hints are not enabled. Type enablehint to enable.")
+            continue
+    elif not hintmutator and user_guess == 'h':
+        print("hint command is disabled.")
+        pass
+    else:
+        pass
 
     #history command
-    if user_guess == 'hist':
+    if user_guess == "hist" and histmutator:
         if histenabled:
             if not guessed_values:
                 print("No Values to print.")
@@ -142,12 +189,21 @@ while True:
                 continue
         else:
             print("History is disabled. Type enablehist to enable.")
+            continue
+    elif not histmutator and user_guess == "hist":
+        print("hist command is disabled.")
+        pass
+    else:
+        pass
 
     #Actual Check for Digit
     if user_guess.isdigit():
         user_guess = int(user_guess)
+    elif user_guess == "hist" or user_guess == "h" or user_guess == "enablehist" or user_guess == "disablehist" \
+            or user_guess == "enablehint" or user_guess == "disablehint":
+        continue
     else:
-        print('Please type a number next time.')
+        print("Please type a valid number")
         continue
 
     if user_guess == random_number:
